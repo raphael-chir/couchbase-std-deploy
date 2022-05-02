@@ -1,22 +1,18 @@
 # Couchbase Cluster Setup
 
----
-
 ## Distributed in memory Data Platform
 
 > This demo shows you how to automate Couchbase Server Cluster deployments in a **Cloud DevOps** approach with [Terraform](https://www.terraform.io/). Couchbase Cluster will be deploy on classical AWS IaaS, but can be deploy everywhere you want. For a fully managed solution, choose our **DBaaS** [Couchbase Capella 30-days Free Trial here](https://cloud.couchbase.com)
 
-> > |               |                           |
-> > | :------------ | :------------------------ |
-> > | **data**      | Default mandatory service |
-> > | **query**     | SQL++ query executor      |
-> > | **index**     | Index storage             |
-> > | **fts**       | Full text search engine   |
-> > | **analytics** | Real Time analytics       |
-> > | **eventing**  | Triggering service        |
-> > | **backup**    | Full backup management    |
-
----
+|               |                           |
+| :------------ | :------------------------ |
+| **data**      | Default mandatory service |
+| **query**     | SQL++ query executor      |
+| **index**     | Index storage             |
+| **fts**       | Full text search engine   |
+| **analytics** | Real Time analytics       |
+| **eventing**  | Triggering service        |
+| **backup**    | Full backup management    |
 
 ## Lab
 
