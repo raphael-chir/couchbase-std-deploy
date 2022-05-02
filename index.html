@@ -1,0 +1,85 @@
+<h1 id="couchbase-cluster-setup">Couchbase Cluster Setup</h1>
+<hr />
+<h2 id="distributed-in-memory-data-platform">Distributed in memory Data Platform</h2>
+<blockquote>
+  <p>This demo shows you how to automate Couchbase Server Cluster deployments in a <strong>Cloud DevOps</strong> approach with <a href="https://www.terraform.io/">Terraform</a>. Couchbase Cluster will be deploy on classical AWS IaaS, but can be deploy everywhere you want. For a fully managed solution, choose our <strong>DBaaS</strong> <a href="https://cloud.couchbase.com">Couchbase Capella 30-days Free Trial here</a></p>
+</blockquote>
+<blockquote>
+  <blockquote>
+    <table>
+    <thead>
+    <tr>
+    <th id="" style="text-align:left;"></th>
+    <th id="" style="text-align:left;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td style="text-align:left;"><strong>data</strong></td>
+    <td style="text-align:left;">Default mandatory service</td>
+    </tr>
+    <tr>
+    <td style="text-align:left;"><strong>query</strong></td>
+    <td style="text-align:left;">SQL++ query executor</td>
+    </tr>
+    <tr>
+    <td style="text-align:left;"><strong>index</strong></td>
+    <td style="text-align:left;">Index storage</td>
+    </tr>
+    <tr>
+    <td style="text-align:left;"><strong>fts</strong></td>
+    <td style="text-align:left;">Full text search engine</td>
+    </tr>
+    <tr>
+    <td style="text-align:left;"><strong>analytics</strong></td>
+    <td style="text-align:left;">Real Time analytics</td>
+    </tr>
+    <tr>
+    <td style="text-align:left;"><strong>eventing</strong></td>
+    <td style="text-align:left;">Triggering service</td>
+    </tr>
+    <tr>
+    <td style="text-align:left;"><strong>backup</strong></td>
+    <td style="text-align:left;">Full backup management</td>
+    </tr>
+    </tbody>
+    </table>
+  </blockquote>
+</blockquote>
+<hr />
+<h2 id="lab">Lab</h2>
+<p><img src="https://drive.google.com/uc?export=download&id=1byd5y0-3fmvf9BAl_uA1ufKp3EuWRLbb" alt="Labs" /></p>
+<h2 id="requirements">Requirements</h2>
+<p>All utils tools is included in this demo sandbox :</p>
+<ul>
+<li>Terraform &gt;= 1.1.7 (an alias tf is create for terraform cli)</li>
+<li>aws cli v2 (WARNING : you are responsible of your access key, don't forget to deactivate or suppress it in your aws account !)</li>
+<li>S3 bucket backend to store tf.state</li>
+</ul>
+<h2 id="project-structure">Project structure</h2>
+<p>My choice is to work online with CodeSandbox (fully vscode ide + NodeJS runtime environment + github sync), so cool as I am so lazy to install all on local. However this project can be clone from <a href="https://github.com/raphael-chir/tf-couchbase">https://github.com/raphael-chir/tf-couchbase</a>. Enjoy …<br />
+Our terraform project is located inside <strong>tf-playgroung</strong> folder</p>
+<pre><code>tf-playground
++ modules
++ + compute # module on which instanciate Couchbase Nodes
++ + network # the baseline infrastructure on which deploy Couchbase nodes
++ scripts
++ + cluster-init.sh # first node installation and configuration script
++ + server-add.sh # other cluster nodes installation and configuration script
++ main.tf
++ outputs.tf
++ variables.tf
++ terraform.tfvars</code></pre>
+<p>All specific couchbase installation and configuration are handled by ec2 user-data mechanism. Other solutions can be implemented but it is not the purpose here.</p>
+<h2 id="playing">Playing</h2>
+<p>Control syntax</p>
+<pre><code class="bash language-bash">tf validate</code></pre>
+<p>Control resources plan</p>
+<pre><code class="bash language-bash">tf plan</code></pre>
+<p>Execute installation</p>
+<pre><code class="bash language-bash">tf apply --auto-approve</code></pre>
+<p>Wait to let perform the couchbase nodes installation, configuration and peering<br />
+Copy outputs couchbase nodes URI, or ssh connexion.<br />
+Play with couchbase server (import data, failover, add/removes nodes )<br />
+Destroy the staging environement when finished</p>
+<pre><code class="bash language-bash">tf destroy --auto-approve</code></pre>
