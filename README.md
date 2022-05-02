@@ -64,7 +64,7 @@ sandbox@sse-sandbox-457lgm:/sandbox$ aws --version
 aws-cli/2.6.1 Python/3.9.11 Linux/5.13.0-40-generic exe/x86_64.debian.10 prompt/off
 ```
 
-Terraform state is stored on a S3 bucket, you need to configure your AWS access key. Don't forget to delete or deactivate your access key in IAM !
+Terraform state is stored on a S3 bucket, you need to configure your AWS access key. **Don't forget to delete or deactivate your access key in IAM, once you have finished this demo !**
 
 ```bash
 sandbox@sse-sandbox-457lgm:/sandbox$ aws configure
