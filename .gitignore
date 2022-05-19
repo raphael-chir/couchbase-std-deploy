@@ -24,3 +24,6 @@ pids
 node_modules/
 jspm_packages/
 tf-playground/.terraform/
+
+# generated files
+index.html
