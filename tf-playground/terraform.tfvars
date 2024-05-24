@@ -10,8 +10,8 @@ resource_tags = {
   owner       = "raphael.chir@couchbase.com"
 }
 
-ssh_public_key_path = "/sandbox/tf-playground/.ssh/id_rsa.pub"
-ssh_private_key_path = "/sandbox/tf-playground/.ssh/id_rsa"
+ssh_public_key_path = ".ssh/id_rsa.pub"
+ssh_private_key_path = ".ssh/id_rsa"
 
 couchbase_configuration = {
   cluster_name    = "terracluster-playgound"

@@ -12,17 +12,17 @@ echo "vm.swappiness=0">>/etc/sysctl.conf
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
 echo never > /sys/kernel/mm/transparent_hugepage/defrag
 # Get and install latest GA release
-wget https://packages.couchbase.com/releases/7.0.3/couchbase-server-enterprise-7.0.3-amzn2.x86_64.rpm
-rpm --install couchbase-server-enterprise-7.0.3-amzn2.x86_64.rpm
+wget https://packages.couchbase.com/releases/7.6.1/couchbase-server-enterprise-7.6.1-linux.x86_64.rpm
+rpm --install couchbase-server-enterprise-7.6.1-linux.x86_64.rpm
 # Wait to complete :( a value of 5 doesn't work
-sleep 10
+sleep 60
 
 #TODO sleep and check parameter store to see cluster node01 status
 # or check status response curl -I -u username:pwd http://ec2-13-51-235-54.eu-north-1.compute.amazonaws.com:8091/pools
 cluster_dns=$(ec2-metadata -p | cut -d " " -f 2)
 export PATH=$PATH:/opt/couchbase/bin
 
-timeout=360
+timeout=1000
 interval=3
 
 while ((timeout > 0)); do
@@ -31,7 +31,7 @@ while ((timeout > 0)); do
   if [ $resp -eq 200 ];
   then
     # Node attachment to cluster (-c options unused here) - Warn : it fails if rebalance
-    couchbase-cli server-add  --server-add=http://$cluster_dns:8091 --server-add-username=${cluster_username} --server-add-password=${cluster_password} --group-name="Group 1" --services=${services} --cluster=http://${cluster_uri}:8091 --username=${cluster_username} --password=${cluster_password}
+    couchbase-cli server-add  --server-add=$cluster_dns --server-add-username=${cluster_username} --server-add-password=${cluster_password} --group-name="Group 1" --services=${services} --cluster=${cluster_uri} --username=${cluster_username} --password=${cluster_password}
     break
   fi
   ((timeout -= interval))
