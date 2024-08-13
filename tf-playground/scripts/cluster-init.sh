@@ -10,21 +10,27 @@ echo "vm.swappiness=0">>/etc/sysctl.conf
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
 echo never > /sys/kernel/mm/transparent_hugepage/defrag
 # Get and install latest GA release
-wget https://packages.couchbase.com/releases/7.6.1/couchbase-server-enterprise-7.6.1-linux.x86_64.rpm
-rpm --install couchbase-server-enterprise-7.6.1-linux.x86_64.rpm
+wget https://packages.couchbase.com/releases/7.6.2/couchbase-server-enterprise-7.6.2-linux.x86_64.rpm
+rpm --install couchbase-server-enterprise-7.6.2-linux.x86_64.rpm
 # Wait to complete
 sleep 60
 
 export PATH=$PATH:/opt/couchbase/bin
-cluster_dns=$(ec2-metadata -h | cut -d " " -f 2)
+local_hostname=$(ec2-metadata -h | cut -d " " -f 2)
+public_hostname=$(ec2-metadata -p | cut -d " " -f 2)
 
-echo "Couchbase node DNS : "$cluster_dns
+echo "Couchbase node DNS : "$local_hostname
 echo "Couchbase cluster name : "${cluster_name}
 echo "Couchbase cluster user : "${cluster_username}
 echo "Couchbase cluster services : "${services}
 
+couchbase-cli node-init --cluster $local_hostname \
+--username ${cluster_username} \
+--password ${cluster_password} \
+--node-init-hostname $public_hostname
+
 # Node and cluster initialization
-couchbase-cli cluster-init -c $cluster_dns \
+couchbase-cli cluster-init -c $local_hostname \
 --cluster-name ${cluster_name} \
 --cluster-username ${cluster_username} \
 --cluster-password ${cluster_password} \

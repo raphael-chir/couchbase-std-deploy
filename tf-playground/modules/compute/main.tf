@@ -21,5 +21,6 @@ resource "aws_instance" "this" {
     Project     = var.resource_tags["project"]
     Owner       = var.resource_tags["owner"]
     Environment = var.resource_tags["environment"]
+    user        = var.resource_tags["user"]
   }
 }

@@ -12,6 +12,7 @@ resource "aws_vpc" "cb_vpc" {
     Project     = var.resource_tags["project"]
     Owner       = var.resource_tags["owner"]
     Environment = var.resource_tags["environment"]
+    user        = var.resource_tags["user"]
   }
 }
 
@@ -23,6 +24,7 @@ resource "aws_internet_gateway" "cb_vpc_internet_gw" {
     Project     = var.resource_tags["project"]
     Owner       = var.resource_tags["owner"]
     Environment = var.resource_tags["environment"]
+    user        = var.resource_tags["user"]
   }
 }
 
@@ -50,6 +52,7 @@ resource "aws_default_route_table" "default_route_table" {
     Project     = var.resource_tags["project"]
     Owner       = var.resource_tags["owner"]
     Environment = var.resource_tags["environment"]
+    user        = var.resource_tags["user"]
   }
 }
 
@@ -68,6 +71,7 @@ resource "aws_subnet" "cb_public_subnet" {
     Project     = var.resource_tags["project"]
     Owner       = var.resource_tags["owner"]
     Environment = var.resource_tags["environment"]
+    user        = var.resource_tags["user"]
   }
 }
 
@@ -98,5 +102,6 @@ resource "aws_security_group" "cb_sg" {
     Project     = var.resource_tags["project"]
     Owner       = var.resource_tags["owner"]
     Environment = var.resource_tags["environment"]
+    user        = var.resource_tags["user"]
   }
 }

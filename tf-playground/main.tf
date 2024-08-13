@@ -5,9 +5,9 @@
 # Shared tfstate
 terraform {
   backend "s3" {
-    region = "eu-north-1"
+    region = "eu-west-3"
     key    = "couchbase-std-deploy-tfstate"
-    bucket = "a-tfstate-rch"
+    bucket = "a-tfstate-rchir"
   }
 }
 
@@ -25,6 +25,7 @@ resource "aws_key_pair" "this" {
     Project     = var.resource_tags["project"]
     Owner       = var.resource_tags["owner"]
     Environment = var.resource_tags["environment"]
+    user        = var.resource_tags["user"]
   }
 } 
 
@@ -45,7 +46,7 @@ module "node01" {
   instance_ami_path      = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
   instance_type          = "t3.medium"
   user_data_script_path  = "scripts/cluster-init.sh"
-  user_data_args         = merge(var.couchbase_configuration, {services="data"})
+  user_data_args         = merge(var.couchbase_configuration, {services="data,query,index,eventing,backup"})
   ssh_public_key_name    = aws_key_pair.this.key_name
   vpc_security_group_ids = module.network.vpc_security_group_ids
   subnet_id              = module.network.subnet_id
@@ -60,7 +61,7 @@ module "node02" {
   instance_ami_path      = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
   instance_type          = "t3.medium"
   user_data_script_path  = "scripts/server-add.sh"
-  user_data_args         = merge(var.couchbase_configuration, {cluster_uri=module.node01.public_dns}, {services="data"})
+  user_data_args         = merge(var.couchbase_configuration, {cluster_uri=module.node01.public_dns}, {services="data,query,index,eventing"})
   ssh_public_key_name    = aws_key_pair.this.key_name
   vpc_security_group_ids = module.network.vpc_security_group_ids
   subnet_id              = module.network.subnet_id
@@ -75,82 +76,7 @@ module "node03" {
   instance_ami_path      = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
   instance_type          = "t3.medium"
   user_data_script_path  = "scripts/server-add.sh"
-  user_data_args         = merge(var.couchbase_configuration, {cluster_uri=module.node01.public_dns}, {services="data"})
-  ssh_public_key_name    = aws_key_pair.this.key_name
-  vpc_security_group_ids = module.network.vpc_security_group_ids
-  subnet_id              = module.network.subnet_id
-}
-
-# Call compute module
-module "node04" {
-  source                 = "./modules/compute"
-  depends_on             = [module.node01]
-  resource_tags          = var.resource_tags
-  base_name              = "node04"
-  instance_ami_path      = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
-  instance_type          = "t3.medium"
-  user_data_script_path  = "scripts/server-add.sh"
-  user_data_args         = merge(var.couchbase_configuration, {cluster_uri=module.node01.public_dns}, {services="query,index"})
-  ssh_public_key_name    = aws_key_pair.this.key_name
-  vpc_security_group_ids = module.network.vpc_security_group_ids
-  subnet_id              = module.network.subnet_id
-}
-
-# Call compute module
-module "node05" {
-  source                 = "./modules/compute"
-  depends_on             = [module.node01]
-  resource_tags          = var.resource_tags
-  base_name              = "node05"
-  instance_ami_path      = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
-  instance_type          = "t3.medium"
-  user_data_script_path  = "scripts/server-add.sh"
-  user_data_args         = merge(var.couchbase_configuration, {cluster_uri=module.node01.public_dns}, {services="query,index"})
-  ssh_public_key_name    = aws_key_pair.this.key_name
-  vpc_security_group_ids = module.network.vpc_security_group_ids
-  subnet_id              = module.network.subnet_id
-}
-
-# Call compute module
-module "node06" {
-  source                 = "./modules/compute"
-  depends_on             = [module.node01]
-  resource_tags          = var.resource_tags
-  base_name              = "node05"
-  instance_ami_path      = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
-  instance_type          = "t3.medium"
-  user_data_script_path  = "scripts/server-add.sh"
-  user_data_args         = merge(var.couchbase_configuration, {cluster_uri=module.node01.public_dns}, {services="eventing"})
-  ssh_public_key_name    = aws_key_pair.this.key_name
-  vpc_security_group_ids = module.network.vpc_security_group_ids
-  subnet_id              = module.network.subnet_id
-}
-
-# Call compute module
-module "node07" {
-  source                 = "./modules/compute"
-  depends_on             = [module.node01]
-  resource_tags          = var.resource_tags
-  base_name              = "node05"
-  instance_ami_path      = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
-  instance_type          = "t3.medium"
-  user_data_script_path  = "scripts/server-add.sh"
-  user_data_args         = merge(var.couchbase_configuration, {cluster_uri=module.node01.public_dns}, {services="eventing"})
-  ssh_public_key_name    = aws_key_pair.this.key_name
-  vpc_security_group_ids = module.network.vpc_security_group_ids
-  subnet_id              = module.network.subnet_id
-}
-
-# Call compute module
-module "node08" {
-  source                 = "./modules/compute"
-  depends_on             = [module.node01]
-  resource_tags          = var.resource_tags
-  base_name              = "node05"
-  instance_ami_path      = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
-  instance_type          = "t3.medium"
-  user_data_script_path  = "scripts/server-add.sh"
-  user_data_args         = merge(var.couchbase_configuration, {cluster_uri=module.node01.public_dns}, {services="backup"})
+  user_data_args         = merge(var.couchbase_configuration, {cluster_uri=module.node01.public_dns}, {services="data,query,index,eventing"})
   ssh_public_key_name    = aws_key_pair.this.key_name
   vpc_security_group_ids = module.network.vpc_security_group_ids
   subnet_id              = module.network.subnet_id
