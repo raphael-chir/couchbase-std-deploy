@@ -16,7 +16,7 @@
 
 ## Lab
 
-![Labs](https://drive.google.com/uc?export=download&id=1byd5y0-3fmvf9BAl_uA1ufKp3EuWRLbb)
+![alt text](image.png)
 
 ## Requirements
 
